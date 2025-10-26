@@ -1,0 +1,38 @@
+{
+  "name": "@prhm0998/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "types": "./dist/utils/index.d.ts"
+    },
+    "./composables": {
+      "import": "./dist/composables/index.js",
+      "types": "./dist/composables/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "jiti scripts/build-index",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "postbuild": "npm run check-dist && npm run check-src",
+    "check-dist": "jiti scripts/check-dir dist",
+    "check-src": "jiti scripts/check-dir src"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@vueuse/core": "^14.0.0",
+    "@wxt-dev/storage": "^1.2.6",
+    "defu": "^6.1.4",
+    "typescript": "^5.6.3",
+    "vite": "^7.1.12"
+  }
+}

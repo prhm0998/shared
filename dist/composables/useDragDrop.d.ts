@@ -1,0 +1,64 @@
+/**
+ * @fileoverview リスト要素の並べ替え（スワップ）と削除（リムーブ）を処理するためのドラッグ＆ドロップ用コンポーザブル関数。
+ *
+ * この関数は、Vue.jsのリアクティブな状態管理（ref）を用いて、
+ * ドラッグ操作に必要なインデックスと、コンテナからの離脱/侵入を追跡します。
+ *
+ * 【使い方】
+ * 1. コンポーネント内でインポートし、データとコールバックを渡します。
+ *
+ * const items = ref(['A', 'B', 'C'])
+ * const { start, drop, end, dragEnterParent, dragLeaveParent, startIndex } = useDragDrop({
+ * onSwap: (from, to) => {
+ * // 配列の要素を入れ替えるロジックを実装
+ * const item = items.value.splice(from, 1)[0]
+ * items.value.splice(to, 0, item)
+ * },
+ * onRemove: (index) => {
+ * // 配列から要素を削除するロジックを実装
+ * items.value.splice(index, 1)
+ * }
+ * })
+ *
+ * 2. テンプレート内でHTMLイベントにバインドします。
+ *
+ * // --- 親要素（リスト全体）にバインド ---
+ * <ul
+ * @dragenter.prevent="dragEnterParent"
+ * @dragleave="dragLeaveParent"
+ * @dragover.prevent // dropを許可するために必要
+ * >
+ * // --- 子要素（各アイテム）にバインド ---
+ * <li
+ * v-for="(item, index) in items"
+ * :key="item"
+ * draggable="true"
+ * @dragstart="start(index)"
+ * @drop="drop(index)"
+ * @dragend="end"
+ * :class="{ 'is-dragging': startIndex === index }"
+ * >
+ * {{ item }}
+ * </li>
+ * </ul>
+ *
+ * @param options - ドラッグ操作完了時の処理を定義するコールバック関数。
+ * @param options.onSwap - 別の要素の上でドロップされたときに呼び出されます (from:元のindex, to:先のindex)。
+ * @param options.onRemove - コンテナ外でドロップされたときに呼び出されます (index:元のindex)。
+ * @returns ドラッグの状態と操作用のイベントハンドラ関数。
+ */
+export declare function useDragDrop(options?: {
+    onSwap?: (from: number, to: number) => void;
+    onRemove?: (index: number) => void;
+}): {
+    startIndex: import("vue").Ref<number | null, number | null>;
+    endIndex: import("vue").Ref<number | null, number | null>;
+    dragLeaveEnterCounter: import("vue").Ref<number, number>;
+    dragLeaveCounter: import("vue").Ref<number, number>;
+    start: (index: number) => void;
+    drop: (index: number) => void;
+    end: () => void;
+    dragLeaveParent: () => void;
+    dragEnterParent: () => void;
+    reset: () => void;
+};
