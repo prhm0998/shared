@@ -1,3 +1,7 @@
+function applyDefaultProperties(obj, defaultObj) {
+  return Object.assign({}, defaultObj, obj);
+}
+
 function isPlainObject(value) {
   if (value === null || typeof value !== "object") {
     return false;
@@ -184,5 +188,5 @@ const watchElementRemoval = (element, callback, interval = 1e3) => {
   return () => clearInterval(checkInterval);
 };
 
-export { elementWatch, filterProperties, getCurrentUrlMatchText, hiraToKana, isValidRegex, isValidSelector, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, sleep, traverseTextNodes, watchElementRemoval };
+export { applyDefaultProperties, elementWatch, filterProperties, getCurrentUrlMatchText, hiraToKana, isValidRegex, isValidSelector, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, sleep, traverseTextNodes, watchElementRemoval };
 //# sourceMappingURL=index.js.map
