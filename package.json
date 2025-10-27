@@ -19,9 +19,9 @@
     "dist"
   ],
   "scripts": {
+    "build": "vite build",
     "prebuild": "jiti scripts/build-index",
-    "build": "vite build && tsc --emitDeclarationOnly",
-    "postbuild": "npm run check-dist && npm run check-src",
+    "postbuild": "jiti scripts/clean-index && npm run check-dist && npm run check-src",
     "check-dist": "jiti scripts/check-dir dist",
     "check-src": "jiti scripts/check-dir src"
   },
@@ -31,8 +31,10 @@
   "devDependencies": {
     "@vueuse/core": "^14.0.0",
     "@wxt-dev/storage": "^1.2.6",
+    "jiti": "^2.6.1",
     "typescript": "^5.6.3",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
     "defu": "^6.1.4"
