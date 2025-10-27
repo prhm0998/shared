@@ -2,8 +2,10 @@ dist\composables\index.d.ts
 dist\composables\index.js
 dist\composables\index.js.map
 dist\composables\useDragDrop.d.ts
+dist\composables\useGenericStore.d.ts
 dist\composables\useStoredValue.d.ts
 dist\index.d.ts
+dist\utils\applyDefaultProperties.d.ts
 dist\utils\elementWatch.d.ts
 dist\utils\filterProperties.d.ts
 dist\utils\getCurrentUrlMatchText.d.ts

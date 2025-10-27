@@ -1,3 +1,4 @@
+export * from './applyDefaultProperties';
 export * from './elementWatch';
 export * from './filterProperties';
 export * from './getCurrentUrlMatchText';

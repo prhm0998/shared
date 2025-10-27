@@ -1,4 +1,4 @@
-import { ref, toValue, watch, nextTick, isRef, shallowRef, onMounted, computed } from 'vue';
+import { ref, toValue, watch, nextTick, isRef, shallowRef, effectScope, onScopeDispose, computed, readonly } from 'vue';
 
 function useDragDrop(options) {
   const startIndex = ref(null);
@@ -57,12 +57,89 @@ typeof WorkerGlobalScope !== "undefined" && globalThis instanceof WorkerGlobalSc
 const noop = () => {};
 
 //#endregion
+//#region utils/filters.ts
+/**
+* @internal
+*/
+function createFilterWrapper(filter, fn) {
+	function wrapper(...args) {
+		return new Promise((resolve, reject) => {
+			Promise.resolve(filter(() => fn.apply(this, args), {
+				fn,
+				thisArg: this,
+				args
+			})).then(resolve).catch(reject);
+		});
+	}
+	return wrapper;
+}
+/**
+* Create an EventFilter that debounce the events
+*/
+function debounceFilter(ms, options = {}) {
+	let timer;
+	let maxTimer;
+	let lastRejector = noop;
+	const _clearTimeout = (timer$1) => {
+		clearTimeout(timer$1);
+		lastRejector();
+		lastRejector = noop;
+	};
+	let lastInvoker;
+	const filter = (invoke$1) => {
+		const duration = toValue(ms);
+		const maxDuration = toValue(options.maxWait);
+		if (timer) _clearTimeout(timer);
+		if (duration <= 0 || maxDuration !== void 0 && maxDuration <= 0) {
+			if (maxTimer) {
+				_clearTimeout(maxTimer);
+				maxTimer = void 0;
+			}
+			return Promise.resolve(invoke$1());
+		}
+		return new Promise((resolve, reject) => {
+			lastRejector = options.rejectOnCancel ? reject : resolve;
+			lastInvoker = invoke$1;
+			if (maxDuration && !maxTimer) maxTimer = setTimeout(() => {
+				if (timer) _clearTimeout(timer);
+				maxTimer = void 0;
+				resolve(lastInvoker());
+			}, maxDuration);
+			timer = setTimeout(() => {
+				if (maxTimer) _clearTimeout(maxTimer);
+				maxTimer = void 0;
+				resolve(invoke$1());
+			}, duration);
+		});
+	};
+	return filter;
+}
+
+//#endregion
 //#region utils/general.ts
 function promiseTimeout(ms, throwOnTimeout = false, reason = "Timeout") {
 	return new Promise((resolve, reject) => {
 		if (throwOnTimeout) setTimeout(() => reject(reason), ms);
 		else setTimeout(resolve, ms);
 	});
+}
+
+//#endregion
+//#region useDebounceFn/index.ts
+/**
+* Debounce execution of a function.
+*
+* @see https://vueuse.org/useDebounceFn
+* @param  fn          A function to be executed after delay milliseconds debounced.
+* @param  ms          A zero-or-greater delay in milliseconds. For event callbacks, values around 100 or 250 (or even higher) are most useful.
+* @param  options     Options
+*
+* @return A new, debounce, function.
+*
+* @__NO_SIDE_EFFECTS__
+*/
+function useDebounceFn(fn, ms = 200, options = {}) {
+	return createFilterWrapper(debounceFilter(ms, options), fn);
 }
 
 //#endregion
@@ -948,27 +1025,25 @@ class MigrationError extends Error {
 }
 
 function useStoredValue(key, initialValue, opts) {
-  const {
-    state,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    execute: _,
-    // Don't include "execute" in returned object
-    ...asyncState
-  } = useAsyncState(
-    async () => await storage.getItem(key, { fallback: initialValue }) ?? initialValue,
-    initialValue,
-    opts
-  );
-  let unwatch;
-  onMounted(() => {
-    unwatch = storage.watch(key, async (newValue) => {
+  const scope = effectScope(true);
+  const result = scope.run(() => {
+    const {
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      execute: _,
+      ...asyncState
+    } = useAsyncState(
+      async () => await storage.getItem(key, { fallback: initialValue }) ?? initialValue,
+      initialValue,
+      opts
+    );
+    const unwatch = storage.watch(key, (newValue) => {
       state.value = newValue ?? initialValue;
     });
-    unwatch?.();
-  });
-  return {
-    // Use a writable computed ref to write updates to storage
-    state: computed({
+    onScopeDispose(() => {
+      unwatch();
+    });
+    const wrapped = computed({
       get() {
         return state.value;
       },
@@ -976,10 +1051,41 @@ function useStoredValue(key, initialValue, opts) {
         void storage.setItem(key, newValue);
         state.value = newValue;
       }
-    }),
-    ...asyncState
+    });
+    return {
+      state: wrapped,
+      ...asyncState
+    };
+  });
+  const stop = () => {
+    scope.stop();
+  };
+  return {
+    ...result,
+    stop
   };
 }
 
-export { useDragDrop, useStoredValue };
+function useGenericStore(key, getDefaultState, deserialize, serialize, updateStateLogic) {
+  const { state: storedJson } = useStoredValue(key, serialize(getDefaultState()));
+  const memoryCache = ref(deserialize(storedJson.value));
+  watch(storedJson, (newVal) => {
+    memoryCache.value = deserialize(newVal);
+  });
+  const saveToStorage = useDebounceFn(() => {
+    storedJson.value = serialize(memoryCache.value);
+  }, 300, { maxWait: 1e3 });
+  watch(memoryCache, () => saveToStorage(), { deep: true });
+  const updateState = (event) => {
+    updateStateLogic(memoryCache, event);
+  };
+  return {
+    // 外部からの直接的な変更を防ぐため、状態は readonly として返します
+    state: readonly(memoryCache),
+    // 外部に公開する状態更新関数
+    updateState
+  };
+}
+
+export { useDragDrop, useGenericStore, useStoredValue };
 //# sourceMappingURL=index.js.map
