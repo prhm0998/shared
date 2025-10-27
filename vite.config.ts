@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
-import path from 'path'
+import path, { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   build: {
@@ -24,4 +25,5 @@ export default defineConfig({
     target: 'esnext',
     sourcemap: true,
   },
+  plugins: [dts({ insertTypesEntry: true, tsconfigPath: resolve(__dirname, "tsconfig.app.json") })]
 })

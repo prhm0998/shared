@@ -1,14 +1,11 @@
-src\composables\index.ts
 src\composables\useDragDrop.ts
 src\composables\useGenericStore.ts
 src\composables\useStoredValue.ts
-src\index.ts
 src\utils\applyDefaultProperties.ts
 src\utils\elementWatch.ts
 src\utils\filterProperties.ts
 src\utils\getCurrentUrlMatchText.ts
 src\utils\hiraToKana.ts
-src\utils\index.ts
 src\utils\isValidRegex.ts
 src\utils\isValidSelector.ts
 src\utils\kanaToFullWidth.ts

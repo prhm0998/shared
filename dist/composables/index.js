@@ -1,4 +1,4 @@
-import { ref, toValue, watch, nextTick, isRef, shallowRef, effectScope, onScopeDispose, computed, readonly } from 'vue';
+import { ref, toValue, watch, nextTick, isRef, shallowRef, effectScope, onScopeDispose, computed } from 'vue';
 
 function useDragDrop(options) {
   const startIndex = ref(null);
@@ -1080,8 +1080,8 @@ function useGenericStore(key, getDefaultState, deserialize, serialize, updateSta
     updateStateLogic(memoryCache, event);
   };
   return {
-    // 外部からの直接的な変更を防ぐため、状態は readonly として返します
-    state: readonly(memoryCache),
+    //state: readonly(memoryCache) as DeepReadonly<Ref<S>>,
+    state: memoryCache,
     // 外部に公開する状態更新関数
     updateState
   };

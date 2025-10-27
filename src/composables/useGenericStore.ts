@@ -1,6 +1,6 @@
 import { useDebounceFn } from '@vueuse/core' // useDebounceFn を想定
 import { type StorageItemKey } from '@wxt-dev/storage'
-import { ref, watch, readonly, type Ref, type DeepReadonly } from 'vue' // Vueのコア関数
+import { ref, watch, type Ref } from 'vue' // Vueのコア関数
 import { useStoredValue } from './useStoredValue'
 
 // ----------------------------------------------------
@@ -62,8 +62,8 @@ export function useGenericStore<S, E>(
   }
 
   return {
-    // 外部からの直接的な変更を防ぐため、状態は readonly として返します
-    state: readonly(memoryCache) as DeepReadonly<Ref<S>>,
+    //state: readonly(memoryCache) as DeepReadonly<Ref<S>>,
+    state: memoryCache,
     // 外部に公開する状態更新関数
     updateState,
   }
