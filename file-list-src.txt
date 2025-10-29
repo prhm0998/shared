@@ -1,10 +1,14 @@
 src\composables\useDragDrop.ts
+src\composables\useEdgeScrollObserver.ts
 src\composables\useGenericStore.ts
 src\composables\useStoredValue.ts
+src\composables\useWindowScrollLock.ts
 src\utils\applyDefaultProperties.ts
 src\utils\elementWatch.ts
 src\utils\filterProperties.ts
+src\utils\flexibleClamp.ts
 src\utils\getCurrentUrlMatchText.ts
+src\utils\getFixedElementsTotalHeight.ts
 src\utils\hiraToKana.ts
 src\utils\isValidRegex.ts
 src\utils\isValidSelector.ts
@@ -12,6 +16,8 @@ src\utils\kanaToFullWidth.ts
 src\utils\kanaToHalfWidth.ts
 src\utils\latinToZenkaku.ts
 src\utils\normalizedWord.ts
+src\utils\scrollWithFixedOffset.ts
 src\utils\sleep.ts
+src\utils\smoothScroll.ts
 src\utils\traverseTextNodes.ts
 src\utils\watchElementRemoval.ts

@@ -67,7 +67,13 @@ walk(targetDir)
 // 既存のファイル書き込みロジック (OUTPUT_FILE の利用箇所を修正)
 // --------------------------------------------------
 
-// 検索終了後、結果をファイルに書き込む
+// ✅ 階層の浅いファイルを優先して並び替え
+fileList.sort((a, b) => {
+  const depthDiff = a.split(path.sep).length - b.split(path.sep).length
+  return depthDiff !== 0 ? depthDiff : a.localeCompare(b)
+})
+
+// 出力
 if (fileList.length > 0) {
   try {
     // fs.writeFileSync の第一引数は string または Buffer、第二引数は string, Buffer, または Uint8Array

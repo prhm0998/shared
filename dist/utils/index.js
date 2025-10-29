@@ -89,8 +89,23 @@ function filterProperties(obj, defaultObj) {
   }, {});
 }
 
+function flexibleClamp(value, option = {}) {
+  const {
+    min = Number.NEGATIVE_INFINITY,
+    max = Number.POSITIVE_INFINITY
+  } = option;
+  return Math.min(Math.max(value, min), max);
+}
+
 function getCurrentUrlMatchText() {
   return `*://${location.hostname}/*`;
+}
+
+function getFixedElementsTotalHeight() {
+  return Array.from(document.querySelectorAll("*")).filter((el) => {
+    const style = getComputedStyle(el);
+    return style.position === "fixed" && style.top === "0px";
+  }).reduce((sum, el) => sum + el.offsetHeight, 0);
 }
 
 function hiraToKana(str) {
@@ -159,7 +174,130 @@ function latinToZenkaku(text) {
 
 const normalizedWord = (key = "") => kanaToFullWidth(hiraToKana(key));
 
+function scrollWithFixedOffset(el, offset) {
+  const rect = el.getBoundingClientRect();
+  const scrollTop = window.scrollY + rect.top - offset;
+  window.scrollTo({ top: scrollTop, behavior: "smooth" });
+}
+
 const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
+
+const smoothScroll = (el, amount, options) => {
+  return new Promise((resolve) => {
+    let animationId;
+    let timeoutId;
+    let finalResult = null;
+    const { timeout, onStart, onFinish } = options;
+    const originalResolve = resolve;
+    resolve = ((result) => {
+      onFinish?.(result);
+      originalResolve(result);
+    });
+    const finishScroll = (reason) => {
+      if (animationId !== void 0) {
+        cancelAnimationFrame(animationId);
+      }
+      if (timeoutId !== void 0) {
+        clearTimeout(timeoutId);
+      }
+      finalResult = { reason };
+    };
+    if (timeout && timeout > 0) {
+      timeoutId = setTimeout(() => {
+        finishScroll("Timeout");
+        if (finalResult) {
+          resolve(finalResult);
+        }
+      }, timeout);
+    }
+    const direction = options.direction ?? "vertical";
+    const isVertical = direction === "vertical";
+    const mode = options.mode;
+    const totalTargetDistance = amount;
+    let absSpeedPerMs;
+    if (mode === "duration") {
+      const opts = options;
+      const { duration, minSpeedPerMs, maxSpeedPerMs } = opts;
+      absSpeedPerMs = flexibleClamp(
+        Math.abs(totalTargetDistance / duration),
+        { min: minSpeedPerMs, max: maxSpeedPerMs }
+      );
+      if (duration === 0) {
+        if (isVertical) {
+          el.scrollTop += totalTargetDistance;
+        } else {
+          el.scrollLeft += totalTargetDistance;
+        }
+        return finishScroll("Error");
+      }
+    } else if (mode === "speed") {
+      const opts = options;
+      const { speedPerMs } = opts;
+      absSpeedPerMs = Math.abs(speedPerMs);
+    } else {
+      console.error("未定義のスクロールモードです。");
+      return finishScroll("Error");
+    }
+    const sign = totalTargetDistance >= 0 ? 1 : -1;
+    const plannedSpeedPerMs = absSpeedPerMs * sign;
+    const getPosition = () => isVertical ? el.scrollTop : el.scrollLeft;
+    let startTime = null;
+    let previousTime = null;
+    let previousFrameTime = null;
+    const INTERVAL_MS = 1;
+    const startPosition = getPosition();
+    let previousPosition = startPosition;
+    let totalActualMoved = 0;
+    onStart?.();
+    const animateFrame = (currentTime) => {
+      if (startTime === null) {
+        startTime = currentTime;
+        previousTime = currentTime;
+        previousFrameTime = currentTime;
+        animationId = requestAnimationFrame(animateFrame);
+        return;
+      }
+      const elapsed = currentTime - previousTime;
+      if (previousFrameTime !== null && elapsed < INTERVAL_MS) {
+        animationId = requestAnimationFrame(animateFrame);
+        return;
+      }
+      previousFrameTime = currentTime;
+      const remainingDistance = totalTargetDistance - totalActualMoved;
+      let distanceToMove = plannedSpeedPerMs;
+      if (sign === 1 && remainingDistance < plannedSpeedPerMs) {
+        distanceToMove = remainingDistance;
+      } else if (sign === -1 && remainingDistance > plannedSpeedPerMs) {
+        distanceToMove = remainingDistance;
+      } else if (remainingDistance === 0) {
+        distanceToMove = 0;
+      }
+      if (isVertical) {
+        el.scrollTop += distanceToMove;
+      } else {
+        el.scrollLeft += distanceToMove;
+      }
+      const currentPosition = getPosition();
+      const actualMove = currentPosition - previousPosition;
+      if (actualMove === 0) {
+        finishScroll("ScrollStagnated");
+        if (finalResult) resolve(finalResult);
+        return;
+      }
+      totalActualMoved += actualMove;
+      previousPosition = currentPosition;
+      const isOverActualTarget = sign === -1 ? totalActualMoved <= totalTargetDistance : totalActualMoved >= totalTargetDistance;
+      if (isOverActualTarget) {
+        finishScroll("TargetReached");
+        if (finalResult) resolve(finalResult);
+        return;
+      }
+      previousTime = currentTime;
+      animationId = requestAnimationFrame(animateFrame);
+    };
+    animationId = requestAnimationFrame(animateFrame);
+  });
+};
 
 function traverseTextNodes(element, callback) {
   const iterator = document.createNodeIterator(
@@ -188,5 +326,5 @@ const watchElementRemoval = (element, callback, interval = 1e3) => {
   return () => clearInterval(checkInterval);
 };
 
-export { applyDefaultProperties, elementWatch, filterProperties, getCurrentUrlMatchText, hiraToKana, isValidRegex, isValidSelector, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, sleep, traverseTextNodes, watchElementRemoval };
+export { applyDefaultProperties, elementWatch, filterProperties, flexibleClamp, getCurrentUrlMatchText, getFixedElementsTotalHeight, hiraToKana, isValidRegex, isValidSelector, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, scrollWithFixedOffset, sleep, smoothScroll, traverseTextNodes, watchElementRemoval };
 //# sourceMappingURL=index.js.map
