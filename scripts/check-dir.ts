@@ -25,14 +25,16 @@ function walk(dir: string): void {
 
       if (stat.isDirectory()) {
         walk(fullPath)
-      } else {
+      }
+      else {
         // コンソールにも出力
         console.log(fullPath)
         // 配列に追加 (string型を string[] に push)
         fileList.push(fullPath)
       }
     })
-  } catch (err) {
+  }
+  catch (err) {
     // エラーは unknown または any としてキャッチされることが一般的ですが、
     // ここでは console.error に渡すため、そのまま使用します。
     console.error(`エラー: ディレクトリ ${dir} の読み取りに失敗しました。`, err)
@@ -80,9 +82,11 @@ if (fileList.length > 0) {
     fs.writeFileSync(OUTPUT_FILE, fileList.join('\n') + '\n')
     // コンソール出力も変更
     console.log(`\n✅ ファイルリストが ${OUTPUT_FILE} に正常に出力されました。`)
-  } catch (err) {
+  }
+  catch (err) {
     console.error(`\n❌ ファイル ${OUTPUT_FILE} への書き込みに失敗しました。`, err)
   }
-} else {
+}
+else {
   console.log('\n⚠️ ファイルが見つかりませんでした。')
 }

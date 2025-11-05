@@ -1,6 +1,6 @@
 // useDragDrop.ts
 
-import { ref } from "vue"
+import { ref } from 'vue'
 
 /**
  * @fileoverview リスト要素の並べ替え（スワップ）と削除（リムーブ）を処理するためのドラッグ＆ドロップ用コンポーザブル関数。
@@ -74,7 +74,8 @@ export function useDragDrop(options?: {
     if (startIndex.value === null) return
     if (dragLeaveEnterCounter.value === 0 && dragLeaveCounter.value > 1) {
       options?.onRemove?.(startIndex.value)
-    } else {
+    }
+    else {
       if (endIndex.value !== null) {
         options?.onSwap?.(startIndex.value, endIndex.value)
       }

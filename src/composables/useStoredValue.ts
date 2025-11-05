@@ -1,5 +1,7 @@
-import { type UseAsyncStateOptions, useAsyncState } from '@vueuse/core'
-import { storage, type StorageItemKey } from '@wxt-dev/storage'
+import { useAsyncState } from '@vueuse/core'
+import type { UseAsyncStateOptions } from '@vueuse/core'
+import { storage } from '@wxt-dev/storage'
+import type { StorageItemKey } from '@wxt-dev/storage'
 import { computed, effectScope, onScopeDispose } from 'vue'
 
 export function useStoredValue<T>(
@@ -18,9 +20,7 @@ export function useStoredValue<T>(
       execute: _,
       ...asyncState
     } = useAsyncState<T, [], true>(
-      async () => (await storage.getItem(key, { fallback: initialValue })) ?? initialValue,
-      initialValue,
-      opts
+      async () => (await storage.getItem(key, { fallback: initialValue })) ?? initialValue, initialValue, opts
     )
 
     const unwatch = storage.watch<T>(key, (newValue) => {

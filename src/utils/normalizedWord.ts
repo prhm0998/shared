@@ -1,9 +1,9 @@
-import { hiraToKana } from "./hiraToKana";
-import { kanaToFullWidth } from "./kanaToFullWidth";
+import { hiraToKana } from './hiraToKana'
+import { kanaToFullWidth } from './kanaToFullWidth'
 
 /**
  *
- * @param key
- * @returns 半角ｶﾅを全角カナに、ひらがなをカタカナに
+ * @param key: string
+ * @returns ｶﾅ/ひらがな/カタカナをすべてカタカナにします
  */
 export const normalizedWord = (key: string = '') => kanaToFullWidth(hiraToKana(key))

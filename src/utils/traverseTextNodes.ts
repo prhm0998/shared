@@ -9,9 +9,7 @@ export function traverseTextNodes(
   callback: (text: string) => string
 ): void {
   const iterator = document.createNodeIterator(
-    element,
-    NodeFilter.SHOW_TEXT,
-    null
+    element, NodeFilter.SHOW_TEXT, null
   )
 
   let node: Node | null

@@ -1,7 +1,7 @@
 /**
  *
  * @param str
- * @returns カタカナを全角にします
+ * @returns カタカナを半角にします
  *
  */
 export function kanaToHalfWidth(str: string) {

@@ -1,5 +1,6 @@
-import { defineConfig } from 'vite'
 import path, { resolve } from 'path'
+
+import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
@@ -7,7 +8,7 @@ export default defineConfig({
     lib: {
       entry: {
         'utils/index': path.resolve(__dirname, 'src/utils/index.ts'),
-        'composables/index': path.resolve(__dirname, 'src/composables/index.ts')
+        'composables/index': path.resolve(__dirname, 'src/composables/index.ts'),
       },
       name: 'shared',
       formats: ['es'],
@@ -25,5 +26,5 @@ export default defineConfig({
     target: 'esnext',
     sourcemap: true,
   },
-  plugins: [dts({ insertTypesEntry: true, tsconfigPath: resolve(__dirname, "tsconfig.app.json") })]
+  plugins: [dts({ insertTypesEntry: true, tsconfigPath: resolve(__dirname, 'tsconfig.app.json') })],
 })
