@@ -1138,9 +1138,8 @@ function useGenericStore(key, getDefaultState, deserialize, serialize, updateSta
     updateStateLogic(memoryCache, event);
   };
   return {
-    //state: readonly(memoryCache) as DeepReadonly<Ref<S>>,
+    // readonlyは諦める
     state: memoryCache,
-    // 外部に公開する状態更新関数
     updateState
   };
 }

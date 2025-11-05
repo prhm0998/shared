@@ -10,7 +10,7 @@ export default defineConfig(
   [
     // directory
     {
-      ignores: ['**/.output/**', '**/.wxt/**', '**/node_modules/**'],
+      ignores: ['**/dist/**', '**/node_modules/**'],
     },
 
     // JS / TS / Vue
