@@ -1,4 +1,4 @@
-import { flexibleClamp } from "./flexibleClamp"
+import { flexibleClamp } from './flexibleClamp'
 
 type ScrollDirection = 'vertical' | 'horizontal'
 type SmoothScrollCallback<T extends SmoothScrollStopReason | void> = (
@@ -101,8 +101,7 @@ export const smoothScroll: SmoothScroll = (el, amount, options) => {
 
       // perFrame 計算ロジック変更: durationで割って速度（msごとの移動量）を直接計算
       absSpeedPerMs = flexibleClamp(
-        Math.abs(totalTargetDistance / duration),
-        { min: minSpeedPerMs, max: maxSpeedPerMs }
+        Math.abs(totalTargetDistance / duration), { min: minSpeedPerMs, max: maxSpeedPerMs }
       )
 
       if (duration === 0) {

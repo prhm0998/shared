@@ -1,5 +1,6 @@
 // useEdgeScrollObserver.ts
-import { onUnmounted, ref, type Ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
+import type { Ref } from 'vue'
 /**
  * スクロール要素の端到達を監視し、指定されたイベントを実行する汎用Composables
  *

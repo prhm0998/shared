@@ -15,10 +15,12 @@ for (const filePath of filesToDelete) {
     if (fs.existsSync(fullPath)) {
       // ファイルを削除
       fs.unlinkSync(fullPath)
-    } else {
+    }
+    else {
       console.log(`⚠️ ファイルが見つかりません: ${filePath}`)
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.error(`❌ 削除中にエラーが発生しました ${filePath}:`, err)
   }
 }

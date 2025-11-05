@@ -9,19 +9,21 @@ export function isValidRegex(input: string): boolean {
   try {
     // new RegExp() で正規表現オブジェクトの作成を試みます。
     // 無効な正規表現パターンであれば SyntaxError がスローされます。
-    new RegExp(input);
+    new RegExp(input)
 
     // エラーがスローされなければ、有効な正規表現です。
-    return true;
-  } catch (e) {
+    return true
+  }
+  catch (e) {
     // 発生したエラーが SyntaxError であるかを確認します。
     if (e instanceof SyntaxError) {
       // SyntaxError の場合、無効な正規表現と判断し false を返します。
-      return false;
-    } else {
+      return false
+    }
+    else {
       // SyntaxError 以外の予期せぬエラー（メモリ不足など）の場合は、
       // 処理を止めずにそのエラーをそのままスローします。
-      throw e;
+      throw e
     }
   }
 }

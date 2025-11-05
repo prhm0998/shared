@@ -1,7 +1,7 @@
 /**
  *
  * @param str
- * @returns ひらがな・カタカナを全角にします
+ * @returns カタカナを全角にします
  *
  */
 // https://qiita.com/noenture/items/8cb7b62c78be5c092564

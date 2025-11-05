@@ -1,6 +1,8 @@
 import { useDebounceFn } from '@vueuse/core' // useDebounceFn を想定
-import { type StorageItemKey } from '@wxt-dev/storage'
-import { ref, watch, type Ref } from 'vue' // Vueのコア関数
+import type { StorageItemKey } from '@wxt-dev/storage'
+import { ref, watch } from 'vue' // Vueのコア関数
+import type { Ref } from 'vue'
+
 import { useStoredValue } from './useStoredValue'
 
 // ----------------------------------------------------
