@@ -6,13 +6,17 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./composables": {
+      "import": "./dist/composables/index.js",
+      "types": "./dist/composables/index.d.ts"
+    },
     "./utils": {
       "import": "./dist/utils/index.js",
       "types": "./dist/utils/index.d.ts"
     },
-    "./composables": {
-      "import": "./dist/composables/index.js",
-      "types": "./dist/composables/index.d.ts"
+    "./pinia": {
+      "import": "./dist/pinia/index.js",
+      "types": "./dist/pinia/index.d.ts"
     }
   },
   "files": [
@@ -26,7 +30,8 @@
     "check-src": "jiti scripts/check-dir src"
   },
   "peerDependencies": {
-    "vue": "^3.5.22"
+    "vue": "^3.5.22",
+    "pinia": "^3.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
@@ -46,7 +51,9 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
-    "defu": "^6.1.4"
+    "browser-extension-url-match": "^1.2.0",
+    "defu": "^6.1.4",
+    "ufo": "^1.6.1"
   },
   "pnpm": {
     "overrides": {

@@ -1,4 +1,6 @@
 dist\index.d.ts
+dist\useGenericStore.js
+dist\useGenericStore.js.map
 dist\composables\index.d.ts
 dist\composables\index.js
 dist\composables\index.js.map
@@ -7,7 +9,12 @@ dist\composables\useEdgeScrollObserver.d.ts
 dist\composables\useGenericStore.d.ts
 dist\composables\useStoredValue.d.ts
 dist\composables\useWindowScrollLock.d.ts
+dist\pinia\index.d.ts
+dist\pinia\index.js
+dist\pinia\index.js.map
+dist\pinia\useGenericPinia.d.ts
 dist\utils\applyDefaultProperties.d.ts
+dist\utils\copyToClipboardText.d.ts
 dist\utils\elementWatch.d.ts
 dist\utils\filterProperties.d.ts
 dist\utils\flexibleClamp.d.ts
@@ -17,8 +24,11 @@ dist\utils\hiraToKana.d.ts
 dist\utils\index.d.ts
 dist\utils\index.js
 dist\utils\index.js.map
+dist\utils\isMatchPattern.d.ts
+dist\utils\isValidPattern.d.ts
 dist\utils\isValidRegex.d.ts
 dist\utils\isValidSelector.d.ts
+dist\utils\isValidUrl.d.ts
 dist\utils\kanaToFullWidth.d.ts
 dist\utils\kanaToHalfWidth.d.ts
 dist\utils\latinToZenkaku.d.ts

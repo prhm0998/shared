@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 const baseDir = path.resolve('src')
-const folders = ['composables', 'utils']
+const folders = ['composables', 'utils', 'pinia']
 
 for (const folder of folders) {
   const dirPath = path.join(baseDir, folder)

@@ -6,6 +6,7 @@ const filesToDelete: string[] = [
   'src/index.ts',
   'src/composables/index.ts',
   'src/utils/index.ts',
+  'src/pinia/index.ts',
 ]
 
 for (const filePath of filesToDelete) {
