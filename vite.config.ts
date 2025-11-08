@@ -7,8 +7,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        'utils/index': path.resolve(__dirname, 'src/utils/index.ts'),
         'composables/index': path.resolve(__dirname, 'src/composables/index.ts'),
+        'utils/index': path.resolve(__dirname, 'src/utils/index.ts'),
+        'pinia/index': path.resolve(__dirname, 'src/pinia/index.ts'),
       },
       name: 'shared',
       formats: ['es'],
@@ -18,7 +19,7 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
       },
-      external: ['vue', 'vite'], // 外部依存があれば追加
+      external: ['vue', 'vite', 'pinia'], // 外部依存があれば追加
     },
     outDir: 'dist',
     emptyOutDir: true,
