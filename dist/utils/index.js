@@ -516,48 +516,48 @@ var hasRequiredDist$1;
 function requireDist$1 () {
 	if (hasRequiredDist$1) return dist;
 	hasRequiredDist$1 = 1;
-	(function (exports) {
+	(function (exports$1) {
 
-		Object.defineProperty(exports, "__esModule", {
+		Object.defineProperty(exports$1, "__esModule", {
 		  value: true
 		});
-		Object.defineProperty(exports, "regex", {
+		Object.defineProperty(exports$1, "regex", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.regex;
 		  }
 		});
-		Object.defineProperty(exports, "RegexFragment", {
+		Object.defineProperty(exports$1, "RegexFragment", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.RegexFragment;
 		  }
 		});
-		Object.defineProperty(exports, "LazyAlternation", {
+		Object.defineProperty(exports$1, "LazyAlternation", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.LazyAlternation;
 		  }
 		});
-		Object.defineProperty(exports, "exact", {
+		Object.defineProperty(exports$1, "exact", {
 		  enumerable: true,
 		  get: function () {
 		    return _escaping.exact;
 		  }
 		});
-		Object.defineProperty(exports, "regexEscape", {
+		Object.defineProperty(exports$1, "regexEscape", {
 		  enumerable: true,
 		  get: function () {
 		    return _escaping.regexEscape;
 		  }
 		});
-		Object.defineProperty(exports, "unwrap", {
+		Object.defineProperty(exports$1, "unwrap", {
 		  enumerable: true,
 		  get: function () {
 		    return _unwrap.unwrap;
 		  }
 		});
-		Object.defineProperty(exports, "proxy", {
+		Object.defineProperty(exports$1, "proxy", {
 		  enumerable: true,
 		  get: function () {
 		    return _proxy.proxy;
@@ -992,18 +992,18 @@ var hasRequiredDist;
 function requireDist () {
 	if (hasRequiredDist) return dist$1;
 	hasRequiredDist = 1;
-	(function (exports) {
+	(function (exports$1) {
 
-		Object.defineProperty(exports, "__esModule", {
+		Object.defineProperty(exports$1, "__esModule", {
 		  value: true
 		});
-		Object.defineProperty(exports, "matchPattern", {
+		Object.defineProperty(exports$1, "matchPattern", {
 		  enumerable: true,
 		  get: function () {
 		    return _matchPattern.matchPattern;
 		  }
 		});
-		Object.defineProperty(exports, "presets", {
+		Object.defineProperty(exports$1, "presets", {
 		  enumerable: true,
 		  get: function () {
 		    return _config.presets;
