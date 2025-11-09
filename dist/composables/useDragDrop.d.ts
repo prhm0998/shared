@@ -51,10 +51,10 @@ export declare function useDragDrop(options?: {
     onSwap?: (from: number, to: number) => void;
     onRemove?: (index: number) => void;
 }): {
-    startIndex: any;
-    endIndex: any;
-    dragLeaveEnterCounter: any;
-    dragLeaveCounter: any;
+    startIndex: import('vue').Ref<number | null, number | null>;
+    endIndex: import('vue').Ref<number | null, number | null>;
+    dragLeaveEnterCounter: import('vue').Ref<number, number>;
+    dragLeaveCounter: import('vue').Ref<number, number>;
     start: (index: number) => void;
     drop: (index: number) => void;
     end: () => void;

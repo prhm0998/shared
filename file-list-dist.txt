@@ -1,6 +1,6 @@
 dist\index.d.ts
-dist\useGenericStore.js
-dist\useGenericStore.js.map
+dist\chunk\useGenericStore.js
+dist\chunk\useGenericStore.js.map
 dist\composables\index.d.ts
 dist\composables\index.js
 dist\composables\index.js.map

@@ -1,5 +1,5 @@
 import { ref, onUnmounted } from 'vue';
-export { u as useGenericStore, a as useStoredValue } from '../useGenericStore.js';
+export { u as useGenericStore, a as useStoredValue } from '../chunk/useGenericStore.js';
 
 function useDragDrop(options) {
   const startIndex = ref(null);

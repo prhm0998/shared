@@ -17,9 +17,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
+        chunkFileNames: 'chunk/[name].js',
       },
       external: ['vue', 'vite', 'pinia'], // 外部依存があれば追加
+
     },
     outDir: 'dist',
     emptyOutDir: true,
