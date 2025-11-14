@@ -6,11 +6,10 @@ src\composables\useWindowScrollLock.ts
 src\pinia\useGenericPinia.ts
 src\utils\applyDefaultProperties.ts
 src\utils\copyToClipboardText.ts
-src\utils\elementWatch.ts
 src\utils\filterProperties.ts
 src\utils\flexibleClamp.ts
-src\utils\getCurrentUrlMatchText.ts
 src\utils\getFixedElementsTotalHeight.ts
+src\utils\getUrlPattern.ts
 src\utils\hiraToKana.ts
 src\utils\isMatchPattern.ts
 src\utils\isValidPattern.ts
@@ -25,4 +24,6 @@ src\utils\scrollWithFixedOffset.ts
 src\utils\sleep.ts
 src\utils\smoothScroll.ts
 src\utils\traverseTextNodes.ts
+src\utils\waitElementCycle.ts
+src\utils\watchElement.ts
 src\utils\watchElementRemoval.ts

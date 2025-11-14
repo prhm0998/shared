@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia';
 import { u as useGenericStore } from '../chunk/useGenericStore.js';
 
-const useGenericPinia = (key, getDefaultState, deserialize, serialize, updateStateLogic) => defineStore(key, () => {
+const useGenericPinia = (...args) => defineStore(args[0], () => {
   const { state, updateState } = useGenericStore(
-    key,
-    getDefaultState,
-    deserialize,
-    serialize,
-    updateStateLogic
+    ...args
   );
   return { state, updateState };
 });

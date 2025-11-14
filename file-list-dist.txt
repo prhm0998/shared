@@ -15,11 +15,10 @@ dist\pinia\index.js.map
 dist\pinia\useGenericPinia.d.ts
 dist\utils\applyDefaultProperties.d.ts
 dist\utils\copyToClipboardText.d.ts
-dist\utils\elementWatch.d.ts
 dist\utils\filterProperties.d.ts
 dist\utils\flexibleClamp.d.ts
-dist\utils\getCurrentUrlMatchText.d.ts
 dist\utils\getFixedElementsTotalHeight.d.ts
+dist\utils\getUrlPattern.d.ts
 dist\utils\hiraToKana.d.ts
 dist\utils\index.d.ts
 dist\utils\index.js
@@ -37,4 +36,6 @@ dist\utils\scrollWithFixedOffset.d.ts
 dist\utils\sleep.d.ts
 dist\utils\smoothScroll.d.ts
 dist\utils\traverseTextNodes.d.ts
+dist\utils\waitElementCycle.d.ts
+dist\utils\watchElement.d.ts
 dist\utils\watchElementRemoval.d.ts

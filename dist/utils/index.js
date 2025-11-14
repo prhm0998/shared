@@ -13,84 +13,6 @@ async function copyToClipboardText(text) {
   }
 }
 
-function isPlainObject(value) {
-  if (value === null || typeof value !== "object") {
-    return false;
-  }
-  const prototype = Object.getPrototypeOf(value);
-  if (prototype !== null && prototype !== Object.prototype && Object.getPrototypeOf(prototype) !== null) {
-    return false;
-  }
-  if (Symbol.iterator in value) {
-    return false;
-  }
-  if (Symbol.toStringTag in value) {
-    return Object.prototype.toString.call(value) === "[object Module]";
-  }
-  return true;
-}
-
-function _defu(baseObject, defaults, namespace = ".", merger) {
-  if (!isPlainObject(defaults)) {
-    return _defu(baseObject, {}, namespace, merger);
-  }
-  const object = Object.assign({}, defaults);
-  for (const key in baseObject) {
-    if (key === "__proto__" || key === "constructor") {
-      continue;
-    }
-    const value = baseObject[key];
-    if (value === null || value === void 0) {
-      continue;
-    }
-    if (merger && merger(object, key, value, namespace)) {
-      continue;
-    }
-    if (Array.isArray(value) && Array.isArray(object[key])) {
-      object[key] = [...value, ...object[key]];
-    } else if (isPlainObject(value) && isPlainObject(object[key])) {
-      object[key] = _defu(
-        value,
-        object[key],
-        (namespace ? `${namespace}.` : "") + key.toString(),
-        merger
-      );
-    } else {
-      object[key] = value;
-    }
-  }
-  return object;
-}
-function createDefu(merger) {
-  return (...arguments_) => (
-    // eslint-disable-next-line unicorn/no-array-reduce
-    arguments_.reduce((p, c) => _defu(p, c, "", merger), {})
-  );
-}
-const defu = createDefu();
-
-function elementWatch(targetElement, query, callback, options = null) {
-  const defaultOptions = {
-    childList: true,
-    subtree: true
-  };
-  const observerOptions = defu(options ?? {}, defaultOptions);
-  targetElement.querySelectorAll(query).forEach(callback);
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (!(node instanceof HTMLElement)) continue;
-        if (node.matches(query)) callback(node);
-        if (observerOptions.subtree) {
-          node.querySelectorAll(query).forEach(callback);
-        }
-      }
-    }
-  });
-  observer.observe(targetElement, observerOptions);
-  return observer;
-}
-
 function filterProperties(obj, defaultObj) {
   return Object.keys(defaultObj).reduce((acc, key) => {
     if (key in obj) {
@@ -108,15 +30,26 @@ function flexibleClamp(value, option = {}) {
   return Math.min(Math.max(value, min), max);
 }
 
-function getCurrentUrlMatchText() {
-  return `*://${location.hostname}/*`;
-}
-
 function getFixedElementsTotalHeight() {
   return Array.from(document.querySelectorAll("*")).filter((el) => {
     const style = getComputedStyle(el);
     return style.position === "fixed" && style.top === "0px";
   }).reduce((sum, el) => sum + el.offsetHeight, 0);
+}
+
+function getUrlPattern(urlSource, option = {}) {
+  try {
+    const { directoryDepth = 0 } = option;
+    const url = new URL(urlSource);
+    const protocol = "*://";
+    const hostPart = url.hostname;
+    const tempSegments = url.pathname.split("/").filter(Boolean);
+    const pathSegments = tempSegments.slice(0, directoryDepth);
+    const pathPart = pathSegments.length ? `/${pathSegments.join("/")}/*` : "/*";
+    return `${protocol}${hostPart}${pathPart}`;
+  } catch {
+    throw new Error("Invalid URL provided");
+  }
 }
 
 function hiraToKana(str) {
@@ -516,48 +449,48 @@ var hasRequiredDist$1;
 function requireDist$1 () {
 	if (hasRequiredDist$1) return dist;
 	hasRequiredDist$1 = 1;
-	(function (exports$1) {
+	(function (exports) {
 
-		Object.defineProperty(exports$1, "__esModule", {
+		Object.defineProperty(exports, "__esModule", {
 		  value: true
 		});
-		Object.defineProperty(exports$1, "regex", {
+		Object.defineProperty(exports, "regex", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.regex;
 		  }
 		});
-		Object.defineProperty(exports$1, "RegexFragment", {
+		Object.defineProperty(exports, "RegexFragment", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.RegexFragment;
 		  }
 		});
-		Object.defineProperty(exports$1, "LazyAlternation", {
+		Object.defineProperty(exports, "LazyAlternation", {
 		  enumerable: true,
 		  get: function () {
 		    return _regex.LazyAlternation;
 		  }
 		});
-		Object.defineProperty(exports$1, "exact", {
+		Object.defineProperty(exports, "exact", {
 		  enumerable: true,
 		  get: function () {
 		    return _escaping.exact;
 		  }
 		});
-		Object.defineProperty(exports$1, "regexEscape", {
+		Object.defineProperty(exports, "regexEscape", {
 		  enumerable: true,
 		  get: function () {
 		    return _escaping.regexEscape;
 		  }
 		});
-		Object.defineProperty(exports$1, "unwrap", {
+		Object.defineProperty(exports, "unwrap", {
 		  enumerable: true,
 		  get: function () {
 		    return _unwrap.unwrap;
 		  }
 		});
-		Object.defineProperty(exports$1, "proxy", {
+		Object.defineProperty(exports, "proxy", {
 		  enumerable: true,
 		  get: function () {
 		    return _proxy.proxy;
@@ -992,18 +925,18 @@ var hasRequiredDist;
 function requireDist () {
 	if (hasRequiredDist) return dist$1;
 	hasRequiredDist = 1;
-	(function (exports$1) {
+	(function (exports) {
 
-		Object.defineProperty(exports$1, "__esModule", {
+		Object.defineProperty(exports, "__esModule", {
 		  value: true
 		});
-		Object.defineProperty(exports$1, "matchPattern", {
+		Object.defineProperty(exports, "matchPattern", {
 		  enumerable: true,
 		  get: function () {
 		    return _matchPattern.matchPattern;
 		  }
 		});
-		Object.defineProperty(exports$1, "presets", {
+		Object.defineProperty(exports, "presets", {
 		  enumerable: true,
 		  get: function () {
 		    return _config.presets;
@@ -1251,6 +1184,277 @@ function traverseTextNodes(element, callback) {
   }
 }
 
+const nullKey = Symbol('null'); // `objectHashes` key for null
+
+let keyCounter = 0;
+
+class ManyKeysMap extends Map {
+	constructor() {
+		super();
+
+		this._objectHashes = new WeakMap();
+		this._symbolHashes = new Map(); // https://github.com/tc39/ecma262/issues/1194
+		this._publicKeys = new Map();
+
+		const [pairs] = arguments; // Map compat
+		if (pairs === null || pairs === undefined) {
+			return;
+		}
+
+		if (typeof pairs[Symbol.iterator] !== 'function') {
+			throw new TypeError(typeof pairs + ' is not iterable (cannot read property Symbol(Symbol.iterator))');
+		}
+
+		for (const [keys, value] of pairs) {
+			this.set(keys, value);
+		}
+	}
+
+	_getPublicKeys(keys, create = false) {
+		if (!Array.isArray(keys)) {
+			throw new TypeError('The keys parameter must be an array');
+		}
+
+		const privateKey = this._getPrivateKey(keys, create);
+
+		let publicKey;
+		if (privateKey && this._publicKeys.has(privateKey)) {
+			publicKey = this._publicKeys.get(privateKey);
+		} else if (create) {
+			publicKey = [...keys]; // Regenerate keys array to avoid external interaction
+			this._publicKeys.set(privateKey, publicKey);
+		}
+
+		return {privateKey, publicKey};
+	}
+
+	_getPrivateKey(keys, create = false) {
+		const privateKeys = [];
+		for (let key of keys) {
+			if (key === null) {
+				key = nullKey;
+			}
+
+			const hashes = typeof key === 'object' || typeof key === 'function' ? '_objectHashes' : (typeof key === 'symbol' ? '_symbolHashes' : false);
+
+			if (!hashes) {
+				privateKeys.push(key);
+			} else if (this[hashes].has(key)) {
+				privateKeys.push(this[hashes].get(key));
+			} else if (create) {
+				const privateKey = `@@mkm-ref-${keyCounter++}@@`;
+				this[hashes].set(key, privateKey);
+				privateKeys.push(privateKey);
+			} else {
+				return false;
+			}
+		}
+
+		return JSON.stringify(privateKeys);
+	}
+
+	set(keys, value) {
+		const {publicKey} = this._getPublicKeys(keys, true);
+		return super.set(publicKey, value);
+	}
+
+	get(keys) {
+		const {publicKey} = this._getPublicKeys(keys);
+		return super.get(publicKey);
+	}
+
+	has(keys) {
+		const {publicKey} = this._getPublicKeys(keys);
+		return super.has(publicKey);
+	}
+
+	delete(keys) {
+		const {publicKey, privateKey} = this._getPublicKeys(keys);
+		return Boolean(publicKey && super.delete(publicKey) && this._publicKeys.delete(privateKey));
+	}
+
+	clear() {
+		super.clear();
+		this._symbolHashes.clear();
+		this._publicKeys.clear();
+	}
+
+	get [Symbol.toStringTag]() {
+		return 'ManyKeysMap';
+	}
+
+	get size() {
+		return super.size;
+	}
+}
+
+function isPlainObject(value) {
+  if (value === null || typeof value !== "object") {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== null && prototype !== Object.prototype && Object.getPrototypeOf(prototype) !== null) {
+    return false;
+  }
+  if (Symbol.iterator in value) {
+    return false;
+  }
+  if (Symbol.toStringTag in value) {
+    return Object.prototype.toString.call(value) === "[object Module]";
+  }
+  return true;
+}
+
+function _defu(baseObject, defaults, namespace = ".", merger) {
+  if (!isPlainObject(defaults)) {
+    return _defu(baseObject, {}, namespace, merger);
+  }
+  const object = Object.assign({}, defaults);
+  for (const key in baseObject) {
+    if (key === "__proto__" || key === "constructor") {
+      continue;
+    }
+    const value = baseObject[key];
+    if (value === null || value === void 0) {
+      continue;
+    }
+    if (merger && merger(object, key, value, namespace)) {
+      continue;
+    }
+    if (Array.isArray(value) && Array.isArray(object[key])) {
+      object[key] = [...value, ...object[key]];
+    } else if (isPlainObject(value) && isPlainObject(object[key])) {
+      object[key] = _defu(
+        value,
+        object[key],
+        (namespace ? `${namespace}.` : "") + key.toString(),
+        merger
+      );
+    } else {
+      object[key] = value;
+    }
+  }
+  return object;
+}
+function createDefu(merger) {
+  return (...arguments_) => (
+    // eslint-disable-next-line unicorn/no-array-reduce
+    arguments_.reduce((p, c) => _defu(p, c, "", merger), {})
+  );
+}
+const defu = createDefu();
+
+const isExist = (element) => {
+  return element !== null ? { isDetected: true, result: element } : { isDetected: false };
+};
+
+const getDefaultOptions = () => ({
+  target: globalThis.document,
+  unifyProcess: true,
+  detector: isExist,
+  observeConfigs: {
+    childList: true,
+    subtree: true,
+    attributes: true
+  },
+  signal: void 0,
+  customMatcher: void 0
+});
+const mergeOptions = (userSideOptions, defaultOptions) => {
+  return defu(userSideOptions, defaultOptions);
+};
+
+const unifyCache = new ManyKeysMap();
+function createWaitElement(instanceOptions) {
+  const { defaultOptions } = instanceOptions;
+  return (selector, options) => {
+    const {
+      target,
+      unifyProcess,
+      observeConfigs,
+      detector,
+      signal,
+      customMatcher
+    } = mergeOptions(options, defaultOptions);
+    const unifyPromiseKey = [
+      selector,
+      target,
+      unifyProcess,
+      observeConfigs,
+      detector,
+      signal,
+      customMatcher
+    ];
+    const cachedPromise = unifyCache.get(unifyPromiseKey);
+    if (unifyProcess && cachedPromise) {
+      return cachedPromise;
+    }
+    const detectPromise = new Promise(
+      // biome-ignore lint/suspicious/noAsyncPromiseExecutor: avoid nesting promise
+      async (resolve, reject) => {
+        if (signal?.aborted) {
+          return reject(signal.reason);
+        }
+        const observer = new MutationObserver(
+          async (mutations) => {
+            for (const _ of mutations) {
+              if (signal?.aborted) {
+                observer.disconnect();
+                break;
+              }
+              const detectResult2 = await detectElement({
+                selector,
+                target,
+                detector,
+                customMatcher
+              });
+              if (detectResult2.isDetected) {
+                observer.disconnect();
+                resolve(detectResult2.result);
+                break;
+              }
+            }
+          }
+        );
+        signal?.addEventListener(
+          "abort",
+          () => {
+            observer.disconnect();
+            return reject(signal.reason);
+          },
+          { once: true }
+        );
+        const detectResult = await detectElement({
+          selector,
+          target,
+          detector,
+          customMatcher
+        });
+        if (detectResult.isDetected) {
+          return resolve(detectResult.result);
+        }
+        observer.observe(target, observeConfigs);
+      }
+    ).finally(() => {
+      unifyCache.delete(unifyPromiseKey);
+    });
+    unifyCache.set(unifyPromiseKey, detectPromise);
+    return detectPromise;
+  };
+}
+async function detectElement({
+  target,
+  selector,
+  detector,
+  customMatcher
+}) {
+  const element = customMatcher ? customMatcher(selector) : target.querySelector(selector);
+  return await detector(element);
+}
+const waitElement = createWaitElement({
+  defaultOptions: getDefaultOptions()
+});
+
 const watchElementRemoval = (element, callback, interval = 1e3) => {
   if (!element.isConnected) {
     console.warn("Element is not connected to the document, it might already be removed.");
@@ -1266,5 +1470,76 @@ const watchElementRemoval = (element, callback, interval = 1e3) => {
   return () => clearInterval(checkInterval);
 };
 
-export { applyDefaultProperties, copyToClipboardText, elementWatch, filterProperties, flexibleClamp, getCurrentUrlMatchText, getFixedElementsTotalHeight, hiraToKana, isMatchPattern, isValidPattern, isValidRegex, isValidSelector, isValidUrl, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, scrollWithFixedOffset, sleep, smoothScroll, traverseTextNodes, watchElementRemoval };
+async function handleElementRemoval(el, stopWatcher, onRemoveCallback) {
+  stopWatcher?.();
+  await onRemoveCallback?.(el);
+}
+function waitElementCycle(callbacks, ...args) {
+  let stopWatcher = void 0;
+  const loop = async () => {
+    const el = await waitElement(...args);
+    await callbacks.onFound?.(el);
+    stopWatcher = watchElementRemoval(el, async () => {
+      await handleElementRemoval(el, stopWatcher, callbacks.onRemove);
+      void loop();
+    });
+  };
+  void loop();
+  return {
+    restart: loop
+  };
+}
+
+function watchElement(targetElement, query, callback, options = null) {
+  const defaultOptions = {
+    childList: true,
+    subtree: true
+  };
+  const observerOptions = defu(options ?? {}, defaultOptions);
+  let observer = null;
+  const runInitialScan = () => {
+    targetElement.querySelectorAll(query).forEach((q) => {
+      callback(q);
+    });
+  };
+  const mutationCallback = (mutations) => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType !== node.ELEMENT_NODE) continue;
+        if (!(node instanceof HTMLElement)) continue;
+        if (node.matches(query)) {
+          callback(node);
+          continue;
+        }
+      }
+    }
+  };
+  const startObserving = () => {
+    if (observer) {
+      observer.disconnect();
+    }
+    observer = new MutationObserver(mutationCallback);
+    observer.observe(targetElement, observerOptions);
+  };
+  const disconnect = () => {
+    observer?.disconnect();
+  };
+  const restart = () => {
+    disconnect();
+    runInitialScan();
+    startObserving();
+  };
+  runInitialScan();
+  startObserving();
+  return {
+    disconnect,
+    restart,
+    get observer() {
+      if (!observer) throw new Error("Observer not initialized.");
+      return observer;
+    }
+  };
+}
+
+export { applyDefaultProperties, copyToClipboardText, filterProperties, flexibleClamp, getFixedElementsTotalHeight, getUrlPattern, handleElementRemoval, hiraToKana, isMatchPattern, isValidPattern, isValidRegex, isValidSelector, isValidUrl, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, scrollWithFixedOffset, sleep, smoothScroll, traverseTextNodes, waitElementCycle, watchElement, watchElementRemoval };
 //# sourceMappingURL=index.js.map
