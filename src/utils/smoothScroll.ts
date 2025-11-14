@@ -173,8 +173,6 @@ export const smoothScroll: SmoothScroll = (el, amount, options) => {
       const remainingDistance = totalTargetDistance - totalActualMoved
 
       // 次のステップで目標を超過するかどうかを判定
-      // totalTargetDistanceとtotalActualMovedが符号付きなので、remainingDistanceも符号付き
-
       let distanceToMove: number = plannedSpeedPerMs
 
       // 目標がプラス方向の場合 (amount > 0):
