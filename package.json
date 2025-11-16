@@ -1,6 +1,6 @@
 {
   "name": "@prhm0998/shared",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "type": "module",
   "exports": {
     "./composables": {
