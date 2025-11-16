@@ -1,5 +1,5 @@
-function applyDefaultProperties(obj, defaultObj) {
-  return Object.assign({}, defaultObj, obj);
+function applyDefaultProperties(...objs) {
+  return Object.assign({}, ...objs);
 }
 
 async function copyToClipboardText(text) {
