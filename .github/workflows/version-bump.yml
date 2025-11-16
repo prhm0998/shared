@@ -39,4 +39,4 @@ jobs:
           git commit -m "chore: bump patch version [skip ci]"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # トークンを使用してプッシュ
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
