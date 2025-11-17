@@ -9,6 +9,7 @@ src\utils\copyToClipboardText.ts
 src\utils\filterProperties.ts
 src\utils\flexibleClamp.ts
 src\utils\getFixedElementsTotalHeight.ts
+src\utils\getHostOnlyPattern.ts
 src\utils\getUrlPattern.ts
 src\utils\hiraToKana.ts
 src\utils\isMatchPattern.ts

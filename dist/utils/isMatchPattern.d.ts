@@ -6,6 +6,6 @@
  * @param options - 加工オプション。`processUrl` が true の場合、pathnameのみをスラッシュ付きで使用。
  * @returns パターンとURLでマッチすればtrue, パターンかURLが不正、またはマッチしなければfalse
  */
-export declare function isMatchPattern(pattern: string, url?: string, options?: {
+export declare function isMatchPattern(pattern: string | string[], url?: string, options?: {
     processUrl?: boolean;
 }): boolean;

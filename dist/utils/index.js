@@ -37,25 +37,6 @@ function getFixedElementsTotalHeight() {
   }).reduce((sum, el) => sum + el.offsetHeight, 0);
 }
 
-function getUrlPattern(urlSource, option = {}) {
-  try {
-    const { directoryDepth = 0 } = option;
-    const url = new URL(urlSource);
-    const protocol = "*://";
-    const hostPart = url.hostname;
-    const tempSegments = url.pathname.split("/").filter(Boolean);
-    const pathSegments = tempSegments.slice(0, directoryDepth);
-    const pathPart = pathSegments.length ? `/${pathSegments.join("/")}/*` : "/*";
-    return `${protocol}${hostPart}${pathPart}`;
-  } catch {
-    throw new Error("Invalid URL provided");
-  }
-}
-
-function hiraToKana(str) {
-  return str.replace(/[\u3041-\u3096\u30FC]/g, (m) => String.fromCharCode(m.charCodeAt(0) + 96));
-}
-
 var dist$1 = {};
 
 var matchPattern = {};
@@ -950,6 +931,42 @@ function requireDist () {
 
 var distExports = requireDist();
 
+function getHostOnlyPattern(urlPattern) {
+  const validPattern = distExports.matchPattern(urlPattern).valid;
+  if (!validPattern) {
+    return null;
+  }
+  const match = urlPattern.match(/^(\*:\/\/[^/]+)(\/.*)?$/);
+  if (!match) {
+    return null;
+  }
+  const host = match[1];
+  const path = match[2] || "";
+  if (path === "" || path === "/") {
+    return urlPattern;
+  }
+  return `${host}/*`;
+}
+
+function getUrlPattern(urlSource, option = {}) {
+  try {
+    const { directoryDepth = 0 } = option;
+    const url = new URL(urlSource);
+    const protocol = "*://";
+    const hostPart = url.hostname;
+    const tempSegments = url.pathname.split("/").filter(Boolean);
+    const pathSegments = tempSegments.slice(0, directoryDepth);
+    const pathPart = pathSegments.length ? `/${pathSegments.join("/")}/*` : "/*";
+    return `${protocol}${hostPart}${pathPart}`;
+  } catch {
+    throw new Error("Invalid URL provided");
+  }
+}
+
+function hiraToKana(str) {
+  return str.replace(/[\u3041-\u3096\u30FC]/g, (m) => String.fromCharCode(m.charCodeAt(0) + 96));
+}
+
 function withTrailingSlash(input = "", respectQueryAndFragment) {
   {
     return input.endsWith("/") ? input : input + "/";
@@ -1541,5 +1558,5 @@ function watchElement(targetElement, query, callback, options = null) {
   };
 }
 
-export { applyDefaultProperties, copyToClipboardText, filterProperties, flexibleClamp, getFixedElementsTotalHeight, getUrlPattern, handleElementRemoval, hiraToKana, isMatchPattern, isValidPattern, isValidRegex, isValidSelector, isValidUrl, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, scrollWithFixedOffset, sleep, smoothScroll, traverseTextNodes, waitElementCycle, watchElement, watchElementRemoval };
+export { applyDefaultProperties, copyToClipboardText, filterProperties, flexibleClamp, getFixedElementsTotalHeight, getHostOnlyPattern, getUrlPattern, handleElementRemoval, hiraToKana, isMatchPattern, isValidPattern, isValidRegex, isValidSelector, isValidUrl, kanaToFullWidth, kanaToHalfWidth, latinToZenkaku, normalizedWord, scrollWithFixedOffset, sleep, smoothScroll, traverseTextNodes, waitElementCycle, watchElement, watchElementRemoval };
 //# sourceMappingURL=index.js.map
