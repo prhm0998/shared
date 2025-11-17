@@ -13,7 +13,7 @@ import { isValidUrl } from './isValidUrl'
  * @returns パターンとURLでマッチすればtrue, パターンかURLが不正、またはマッチしなければfalse
  */
 export function isMatchPattern(
-  pattern: string,
+  pattern: string | string[],
   url: string = location.href,
   options: { processUrl?: boolean } = {}
 ): boolean {

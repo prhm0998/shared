@@ -3,6 +3,7 @@ export * from './copyToClipboardText';
 export * from './filterProperties';
 export * from './flexibleClamp';
 export * from './getFixedElementsTotalHeight';
+export * from './getHostOnlyPattern';
 export * from './getUrlPattern';
 export * from './hiraToKana';
 export * from './isMatchPattern';

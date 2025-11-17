@@ -18,6 +18,7 @@ dist\utils\copyToClipboardText.d.ts
 dist\utils\filterProperties.d.ts
 dist\utils\flexibleClamp.d.ts
 dist\utils\getFixedElementsTotalHeight.d.ts
+dist\utils\getHostOnlyPattern.d.ts
 dist\utils\getUrlPattern.d.ts
 dist\utils\hiraToKana.d.ts
 dist\utils\index.d.ts
